@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GainsPlus - Programme d'affiliation rémunérateur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #10b981 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .copy-btn {
+            transition: all 0.3s ease;
+        }
+        .copy-btn.copied {
+            background-color: #10b981;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Loading Overlay -->
+    <div id="loader" class="fixed inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-primary"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl">GP</div>
+                <h1 class="text-xl font-bold text-dark">GainsPlus</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-primary transition">Fonctionnalités</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-primary transition">Comment ça marche</a>
+                <a href="#pricing" class="text-gray-600 hover:text-primary transition">Tarifs</a>
+                <a href="#faq" class="text-gray-600 hover:text-primary transition">FAQ</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleAuthModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Connexion</button>
+                <button class="md:hidden text-gray-600" id="mobile-menu-button">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-white py-4 px-4 shadow-md" id="mobile-menu">
+            <div class="flex flex-col space-y-3">
+                <a href="#features" class="text-gray-600 hover:text-primary transition">Fonctionnalités</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-primary transition">Comment ça marche</a>
+                <a href="#pricing" class="text-gray-600 hover:text-primary transition">Tarifs</a>
+                <a href="#faq" class="text-gray-600 hover:text-primary transition">FAQ</a>
+                <button onclick="toggleAuthModal()" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition mt-2">Connexion</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Gagnez de l'argent en recommandant GainsPlus</h1>
+                <p class="text-xl mb-8">Rejoignez notre programme d'affiliation et commencez à générer des revenus passifs dès aujourd'hui.</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button onclick="toggleAuthModal('register')" class="bg-white text-primary px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">S'inscrire gratuitement</button>
+                    <button class="border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-white hover:text-primary transition">En savoir plus</button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-dark font-bold text-xl">Tableau de bord</h3>
+                        <span class="text-sm text-gray-500">Exemple</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p class="text-gray-500 text-sm">Gains totaux</p>
+                            <p class="text-2xl font-bold text-dark">€125.50</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p class="text-gray-500 text-sm">Filleuls</p>
+                            <p class="text-2xl font-bold text-dark">24</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-dark font-bold mb-2">Lien d'affiliation</h4>
+                        <div class="flex">
+                            <input type="text" id="affiliate-link" value="https://gainsplus.com/?ref=exemple123" class="flex-grow px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary" readonly>
+                            <button onclick="copyAffiliateLink()" class="copy-btn bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition">Copier</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-blue-500 mt-1">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">Vous gagnez 1€ pour chaque filleul inscrit et 10% de leurs dépôts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Pourquoi choisir GainsPlus ?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Notre plateforme offre tout ce dont vous avez besoin pour maximiser vos revenus d'affiliation.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition card-hover">
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-link text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Lien d'affiliation unique</h3>
+                    <p class="text-gray-600">Obtenez votre lien personnel pour suivre toutes vos recommandations et gagner des commissions.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition card-hover">
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Statistiques en temps réel</h3>
+                    <p class="text-gray-600">Suivez vos performances, vos gains et l'activité de vos filleuls en direct.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition card-hover">
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-wallet text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Retraits faciles</h3>
+                    <p class="text-gray-600">Retirez vos gains via PayPal, virement bancaire ou crypto-monnaies.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition card-hover">
+                    <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white mb-4">
+                        <i class="fas fa-gift text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Bonus de parrainage</h3>
+                    <p class="text-gray-600">Recevez des bonus supplémentaires lorsque vos filleuls deviennent actifs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Comment ça marche ?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">En seulement 4 étapes simples, commencez à générer des revenus passifs.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">1</div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Inscrivez-vous</h3>
+                    <p class="text-gray-600">Créez votre compte gratuitement en quelques minutes.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">2</div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Activez votre compte</h3>
+                    <p class="text-gray-600">Effectuez un dépôt minimum pour activer votre lien d'affiliation.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">3</div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Partagez votre lien</h3>
+                    <p class="text-gray-600">Invitez vos amis via votre lien personnel, réseaux sociaux, etc.</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">4</div>
+                    <h3 class="text-xl font-bold text-dark mb-2">Gagnez des commissions</h3>
+                    <p class="text-gray-600">Recevez des commissions sur chaque action de vos filleuls.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Nos offres</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Choisissez le plan qui correspond à vos objectifs.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="bg-gray-50 rounded-xl shadow-sm p-8 border border-gray-200">
+                    <h3 class="text-xl font-bold text-dark mb-2">Starter</h3>
+                    <p class="text-gray-600 mb-6">Parfait pour commencer</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-dark">Gratuit</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Lien d'affiliation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Tableau de bord basique</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>1€ par filleul inscrit</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-times text-red-400 mr-2"></i>
+                            <span>Bonus de dépôt</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-times text-red-400 mr-2"></i>
+                            <span>Statistiques avancées</span>
+                        </li>
+                    </ul>
+                    <button onclick="toggleAuthModal('register')" class="w-full bg-gray-200 text-dark px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition">Commencer</button>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="bg-gradient-to-b from-primary to-indigo-600 rounded-xl shadow-lg p-8 text-white relative">
+                    <div class="absolute top-0 right-0 bg-yellow-400 text-dark text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">POPULAIRE</div>
+                    <h3 class="text-xl font-bold mb-2">Premium</h3>
+                    <p class="text-indigo-100 mb-6">Le meilleur rapport qualité-prix</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold">€20</span>
+                        <span class="text-indigo-200">/ dépôt unique</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-yellow-400 mr-2"></i>
+                            <span>Tout dans Starter</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-yellow-400 mr-2"></i>
+                            <span>+20% de bonus sur le 1er dépôt</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-yellow-400 mr-2"></i>
+                            <span>10% des dépôts des filleuls</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-yellow-400 mr-2"></i>
+                            <span>Statistiques avancées</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-yellow-400 mr-2"></i>
+                            <span>Support prioritaire</span>
+                        </li>
+                    </ul>
+                    <button onclick="toggleAuthModal('register')" class="w-full bg-white text-primary px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">S'abonner</button>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="bg-gray-50 rounded-xl shadow-sm p-8 border border-gray-200">
+                    <h3 class="text-xl font-bold text-dark mb-2">Pro</h3>
+                    <p class="text-gray-600 mb-6">Pour les affiliés sérieux</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-dark">€50</span>
+                        <span class="text-gray-500">/ dépôt unique</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Tout dans Premium</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>+30% de bonus sur le 1er dépôt</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>15% des dépôts des filleuls</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Formation exclusive</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Retraits accélérés</span>
+                        </li>
+                    </ul>
+                    <button onclick="toggleAuthModal('register')" class="w-full bg-gray-200 text-dark px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition">S'abonner</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Témoignages</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Ce que nos affiliés disent de GainsPlus.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark">Jean D.</h4>
+                            <p class="text-gray-500 text-sm">Affilié depuis 6 mois</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"J'ai généré plus de 500€ en seulement 3 mois avec GainsPlus. La plateforme est intuitive et les paiements sont rapides."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark">Marie L.</h4>
+                            <p class="text-gray-500 text-sm">Affiliée depuis 1 an</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Le programme premium est vraiment rentable. J'ai presque doublé mes revenus grâce aux bonus supplémentaires."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark">Thomas P.</h4>
+                            <p class="text-gray-500 text-sm">Affilié depuis 3 mois</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"J'apprécie particulièrement les statistiques détaillées qui me permettent d'optimiser mes campagnes de parrainage."</p>
+                    <div class="flex mt-4 text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-dark mb-4">Questions fréquentes</h2>
+                <p class="text-gray-600">Trouvez des réponses aux questions les plus courantes.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition" onclick="toggleFAQ(this)">
+                        <span class="font-medium text-dark">Comment puis-je gagner de l'argent avec GainsPlus ?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content p-4 hidden">
+                        <p class="text-gray-600">Vous gagnez de l'argent de trois manières principales : 1) 1€ pour chaque filleul qui s'inscrit via votre lien, 2) un pourcentage des dépôts de vos filleuls (10% en premium), et 3) des bonus lorsque vos filleuls atteignent certains seuils d'activité.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition" onclick="toggleFAQ(this)">
+                        <span class="font-medium text-dark">Quel est le montant minimum pour un retrait ?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content p-4 hidden">
+                        <p class="text-gray-600">Le montant minimum pour effectuer un retrait est de 20€. De plus, vous devez avoir au moins 3 filleuls actifs (ayant effectué au moins un dépôt).</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition" onclick="toggleFAQ(this)">
+                        <span class="font-medium text-dark">Combien de temps prend un retrait ?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content p-4 hidden">
+                        <p class="text-gray-600">Les retraits sont généralement traités dans un délai de 48 heures ouvrables. Les retraits vers PayPal sont généralement plus rapides que les virements bancaires.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition" onclick="toggleFAQ(this)">
+                        <span class="font-medium text-dark">Puis-je avoir plusieurs comptes ?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content p-4 hidden">
+                        <p class="text-gray-600">Non, notre politique interdit strictement les comptes multiples. Nous utilisons des vérifications d'IP et d'autres méthodes pour détecter les doubles comptes, qui peuvent entraîner la suspension de tous vos comptes.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition" onclick="toggleFAQ(this)">
+                        <span class="font-medium text-dark">Comment puis-je maximiser mes gains ?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-content p-4 hidden">
+                        <p class="text-gray-600">Pour maximiser vos gains : 1) Optez pour le plan premium pour bénéficier de commissions plus élevées, 2) Partagez votre lien sur plusieurs plateformes (réseaux sociaux, forums, etc.), 3) Encouragez vos filleuls à effectuer des dépôts, et 4) Profitez des bonus saisonniers que nous proposons régulièrement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Prêt à commencer à gagner ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Rejoignez des milliers d'affiliés qui génèrent des revenus passifs avec GainsPlus.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button onclick="toggleAuthModal('register')" class="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">S'inscrire maintenant</button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-primary transition">Voir la démo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition hidden">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Column 1 -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl">GP</div>
+                        <h3 class="text-xl font-bold text-white">GainsPlus</h3>
+                    </div>
+                    <p class="mb-4">La plateforme d'affiliation la plus rémunératrice du marché.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Liens utiles</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Accueil</a></li>
+                        <li><a href="#features" class="hover:text-white transition">Fonctionnalités</a></li>
+                        <li><a href="#how-it-works" class="hover:text-white transition">Comment ça marche</a></li>
+                        <li><a href="#pricing" class="hover:text-white transition">Tarifs</a></li>
+                        <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Légal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="hover:text-white transition">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition">Politique de cookies</a></li>
+                        <li><a href="#" class="hover:text-white transition">Mentions légales</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-2"></i>
+                            <span>contact@gainsplus.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-2"></i>
+                            <span>+33 1 23 45 67 89</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2"></i>
+                            <span>123 Rue des Affiliés, 75001 Paris, France</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-700 text-center">
+                <p>&copy; 2023 GainsPlus. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent" class="fixed bottom-0 left-0 right-0 bg-dark text-white p-4 hidden">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <p class="mb-4 md:mb-0">Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez notre <a href="#" class="text-primary hover:underline">politique de cookies</a>.</p>
+            <button onclick="acceptCookies()" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">Accepter</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="auth-modal">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-dark" id="auth-modal-title">Connexion</h3>
+                    <button onclick="toggleAuthModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Tabs -->
+                <div class="flex border-b mb-6">
+                    <button class="auth-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="login">Connexion</button>
+                    <button class="auth-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="register">Inscription</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div class="tab-content active" id="login-tab">
+                    <form id="login-form">
+                        <div class="mb-4">
+                            <label for="login-email" class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="login-password" class="block text-gray-700 mb-2">Mot de passe</label>
+                            <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition mb-4">Se connecter</button>
+                        <div class="text-center">
+                            <a href="#" class="text-primary hover:underline">Mot de passe oublié ?</a>
+                        </div>
+                    </form>
+                    
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Ou continuer avec</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-50 transition">
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            <span>Google</span>
+                        </button>
+                        <button class="flex items-center justify-center border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-50 transition">
+                            <i class="fab fa-facebook-f text-blue-600 mr-2"></i>
+                            <span>Facebook</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div class="tab-content" id="register-tab">
+                    <form id="register-form">
+                        <div class="mb-4">
+                            <label for="register-name" class="block text-gray-700 mb-2">Nom complet</label>
+                            <input type="text" id="register-name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="register-email" class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" id="register-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="register-password" class="block text-gray-700 mb-2">Mot de passe</label>
+                            <input type="password" id="register-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                        <div class="mb-6">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="terms" type="checkbox" class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded" required>
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="terms" class="text-gray-700">J'accepte les <a href="#" class="text-primary hover:underline">conditions d'utilisation</a> et la <a href="#" class="text-primary hover:underline">politique de confidentialité</a></label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition">S'inscrire</button>
+                    </form>
+                    
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Ou s'inscrire avec</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-50 transition">
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            <span>Google</span>
+                        </button>
+                        <button class="flex items-center justify-center border border-gray-300 rounded-lg py-2 px-4 hover:bg-gray-50 transition">
+                            <i class="fab fa-facebook-f text-blue-600 mr-2"></i>
+                            <span>Facebook</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal (Logged In) -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="dashboard-modal">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-dark">Tableau de bord</h3>
+                    <button onclick="toggleDashboardModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Dashboard Tabs -->
+                <div class="flex border-b mb-6">
+                    <button class="dashboard-tab py-2 px-4 font-medium border-b-2 border-primary text-primary" data-tab="overview">Aperçu</button>
+                    <button class="dashboard-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="affiliates">Filleuls</button>
+                    <button class="dashboard-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="earnings">Gains</button>
+                    <button class="dashboard-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="withdrawals">Retraits</button>
+                    <button class="dashboard-tab py-2 px-4 font-medium border-b-2 border-transparent hover:text-primary transition" data-tab="settings">Paramètres</button>
+                </div>
+                
+                <!-- Overview Tab -->
+                <div class="tab-content active" id="overview-tab">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="stat-card bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <p class="text-gray-500 mb-2">Solde disponible</p>
+                            <p class="text-3xl font-bold text-dark">€125.50</p>
+                        </div>
+                        <div class="stat-card bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <p class="text-gray-500 mb-2">Filleuls actifs</p>
+                            <p class="text-3xl font-bold text-dark">8/24</p>
+                        </div>
+                        <div class="stat-card bg-gray-50 p-6 rounded-lg border border-gray-200">
+                            <p class="text-gray-500 mb-2">Gains ce mois-ci</p>
+                            <p class="text-3xl font-bold text-dark">€42.75</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-dark mb-4">Lien d'affiliation</h4>
+                        <div class="flex">
+                            <input type="text" id="dashboard-affiliate-link" value="https://gainsplus.com/?ref=user12345" class="flex-grow px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary" readonly>
+                            <button onclick="copyDashboardAffiliateLink()" class="copy-btn bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition">Copier</button>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Partagez ce lien pour inviter des amis et gagner des commissions</p>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-dark mb-4">Statistiques rapides</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div>
+                                    <p class="text-gray-500 text-sm">Clics</p>
+                                    <p class="text-xl font-bold text-dark">156</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Inscriptions</p>
+                                    <p class="text-xl font-bold text-dark">24</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Taux de conversion</p>
+                                    <p class="text-xl font-bold text-dark">15.4%</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Dépôts filleuls</p>
+                                    <p class="text-xl font-bold text-dark">€420</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-dark mb-4">Dernières activités</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Nouveau filleul</p>
+                                            <p class="text-sm text-gray-500">Marc D. s'est inscrit via votre lien</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-green-600">+1€</p>
+                                        <p class="text-sm text-gray-500">Aujourd'hui, 14:32</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                                            <i class="fas fa-coins"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Dépôt filleul</p>
+                                            <p class="text-sm text-gray-500">Sophie M. a déposé 50€</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-blue-600">+5€</p>
+                                        <p class="text-sm text-gray-500">Hier, 18:15</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium">Retrait approuvé</p>
+                                            <p class="text-sm text-gray-500">Votre retrait de 30€ a été envoyé</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-medium text-purple-600">-30€</p>
+                                        <p class="text-sm text-gray-500">12 juin, 09:42</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Affiliates Tab -->
+                <div class="tab-content" id="affiliates-tab">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-dark mb-4">Vos filleuls (24)</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inscription</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dépôts</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gains</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">Jean D.</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">15/06/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Actif</span></td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€120</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-green-600">€12</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">Marie L.</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">10/06/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Actif</span></td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€75</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-green-600">€7.50</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">Thomas P.</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">05/06/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Inactif</span></td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€0</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-green-600">€1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">Sophie M.</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">01/06/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Actif</span></td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€50</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-green-600">€5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <p class="text-sm text-gray-500">Affichage de 1 à 4 sur 24 filleuls</p>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Précédent</button>
+                                    <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Suivant</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-dark mb-4">Inviter des amis</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="mb-4">Partagez votre lien d'affiliation via :</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <button class="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fab fa-facebook-f mr-2"></i>
+                                    <span>Facebook</span>
+                                </button>
+                                <button class="flex items-center justify-center bg-blue-400 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition">
+                                    <i class="fab fa-twitter mr-2"></i>
+                                    <span>Twitter</span>
+                                </button>
+                                <button class="flex items-center justify-center bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition">
+                                    <i class="fab fa-google mr-2"></i>
+                                    <span>Gmail</span>
+                                </button>
+                                <button class="flex items-center justify-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">
+                                    <i class="fab fa-whatsapp mr-2"></i>
+                                    <span>WhatsApp</span>
+                                </button>
+                            </div>
+                            <p class="mt-4 text-sm text-gray-500">Vous pouvez aussi copier le lien et le partager comme vous le souhaitez.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Earnings Tab -->
+                <div class="tab-content" id="earnings-tab">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-dark mb-4">Vos gains</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <p class="text-gray-500 mb-2">Gains totaux</p>
+                                    <p class="text-3xl font-bold text-dark">€125.50</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 mb-2">Gains disponibles</p>
+                                    <p class="text-3xl font-bold text-dark">€95.50</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h5 class="font-medium text-dark mb-3">Répartition des gains</h5>
+                                <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-blue-500 to-green-500" style="width: 76%"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 mt-2 text-sm">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                        <span>Inscriptions (€24)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-indigo-500 mr-2"></div>
+                                        <span>Dépôts (€101.50)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                        <span>Bonus (€0)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-medium text-dark mb-3">Historique des gains</h5>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-4 py-3 whitespace-nowrap">15/06/2023</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Jean D.</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Commission dépôt</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-green-600">+€12</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 whitespace-nowrap">14/06/2023</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Marie L.</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Commission dépôt</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-green-600">+€7.50</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 whitespace-nowrap">10/06/2023</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Sophie M.</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Commission dépôt</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-green-600">+€5</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 whitespace-nowrap">05/06/2023</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Thomas P.</td>
+                                                <td class="px-4 py-3 whitespace-nowrap">Inscription filleul</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-green-600">+€1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="mt-4 flex justify-between items-center">
+                                    <p class="text-sm text-gray-500">Affichage de 1 à 4 sur 24 transactions</p>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Précédent</button>
+                                        <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Suivant</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Withdrawals Tab -->
+                <div class="tab-content" id="withdrawals-tab">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-dark mb-4">Demander un retrait</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <p class="text-gray-500 mb-2">Solde disponible</p>
+                                    <p class="text-3xl font-bold text-dark">€95.50</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 mb-2">Minimum de retrait</p>
+                                    <p class="text-3xl font-bold text-dark">€20</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 mb-2">Filleuls actifs</p>
+                                    <p class="text-3xl font-bold text-dark">8/3</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Montant à retirer (€)</label>
+                                <input type="number" id="withdrawal-amount" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="20.00" min="20" max="95.50" step="0.01">
+                                <p class="text-sm text-gray-500 mt-1">Frais de retrait: 1€</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Méthode de retrait</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <button class="withdrawal-method flex items-center justify-center border-2 border-gray-200 rounded-lg p-3 hover:border-primary transition">
+                                        <i class="fab fa-paypal text-blue-500 text-2xl mr-2"></i>
+                                        <span>PayPal</span>
+                                    </button>
+                                    <button class="withdrawal-method flex items-center justify-center border-2 border-gray-200 rounded-lg p-3 hover:border-primary transition">
+                                        <i class="fas fa-university text-purple-500 text-2xl mr-2"></i>
+                                        <span>Virement</span>
+                                    </button>
+                                    <button class="withdrawal-method flex items-center justify-center border-2 border-gray-200 rounded-lg p-3 hover:border-primary transition">
+                                        <i class="fab fa-bitcoin text-yellow-500 text-2xl mr-2"></i>
+                                        <span>Crypto</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="withdrawal-details" class="block text-gray-700 mb-2">Coordonnées</label>
+                                <input type="text" id="withdrawal-details" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Email PayPal / IBAN / Adresse crypto">
+                            </div>
+                            
+                            <button class="w-full bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Demander le retrait</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-dark mb-4">Historique des retraits</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Méthode</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">12/06/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">PayPal</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€30</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Complété</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">05/05/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">Virement</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€50</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Complété</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap">15/04/2023</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">Bitcoin</td>
+                                            <td class="px-4 py-3 whitespace-nowrap">€25</td>
+                                            <td class="px-4 py-3 whitespace-nowrap"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Complété</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <p class="text-sm text-gray-500">Affichage de 1 à 3 sur 3 retraits</p>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Précédent</button>
+                                    <button class="px-3 py-1 border rounded-md text-gray-700 bg-white hover:bg-gray-50">Suivant</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="tab-content" id="settings-tab">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-dark mb-4">Paramètres du compte</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <form>
+                                <div class="mb-4">
+                                    <label for="profile-name" class="block text-gray-700 mb-2">Nom complet</label>
+                                    <input type="text" id="profile-name" value="Jean Dupont" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="profile-email" class="block text-gray-700 mb-2">Email</label>
+                                    <input type="email" id="profile-email" value="jean.dupont@example.com" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="profile-phone" class="block text-gray-700 mb-2">Téléphone</label>
+                                    <input type="tel" id="profile-phone" value="+33 6 12 34 56 78" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 mb-2">Notifications</label>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="notif-email" type="checkbox" class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded" checked>
+                                            <label for="notif-email" class="ml-2 text-gray-700">Email</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="notif-sms" type="checkbox" class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded">
+                                            <label for="notif-sms" class="ml-2 text-gray-700">SMS</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Enregistrer les modifications</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-dark mb-4">Changer de mot de passe</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <form>
+                                <div class="mb-4">
+                                    <label for="current-password" class="block text-gray-700 mb-2">Mot de passe actuel</label>
+                                    <input type="password" id="current-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="new-password" class="block text-gray-700 mb-2">Nouveau mot de passe</label>
+                                    <input type="password" id="new-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label for="confirm-password" class="block text-gray-700 mb-2">Confirmer le nouveau mot de passe</label>
+                                    <input type="password" id="confirm-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                
+                                <button class="w-full bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 transition">Changer le mot de passe</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-dark mb-4">Options avancées</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-medium text-dark">Vérification en deux étapes</p>
+                                        <p class="text-sm text-gray-500
+</body>
+</html>
